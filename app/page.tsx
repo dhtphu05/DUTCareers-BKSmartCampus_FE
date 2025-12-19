@@ -12,8 +12,9 @@ import { RecruiterView } from "@/components/recruiter-view"
 import { JobFairView } from "@/components/jobfair-view"
 import { UniversityView } from "@/components/university-view"
 import { JobDetailView } from "@/components/job-detail-view"
+import { WorkshopDetailView } from "@/components/workshop-detail-view"
 
-export type ViewType = "student-home" | "job-detail" | "event-hub" | "recruiter-dashboard" | "admin-dashboard"
+export type ViewType = "student-home" | "job-detail" | "event-hub" | "recruiter-dashboard" | "admin-dashboard" | "workshop-detail"
 
 export interface Job {
   id: number
@@ -58,6 +59,8 @@ export default function HomePage() {
         )}
 
         {currentView === "job-detail" && selectedJob && <JobDetailView job={selectedJob} onBack={handleBackToHome} />}
+
+        {currentView === "workshop-detail" && <WorkshopDetailView onBack={() => setCurrentView("student-home")} />}
 
         {currentView === "event-hub" && (
           <div className="container mx-auto px-4 lg:px-8 py-12">

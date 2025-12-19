@@ -43,7 +43,7 @@ const workshops = [
     image: "https://scontent.fdad3-1.fna.fbcdn.net/v/t39.30808-6/547580227_1194616189362081_2987992703467485170_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeFu8xOP7uaFgdIQQrOX_ZEpZTyrIibctoBlPKsiJty2gCasWvACk4rK5q2BLy3D4wluGo-62txLuQKBu_BPY6JU&_nc_ohc=wt36pfIlDPIQ7kNvwFyyVHr&_nc_oc=AdlbCPtOOSvLQFVs8elCq0IOH_CjmxPaJcz8MdFhG1MWcHr7c9AlCC-AhR_RHxuIDdg&_nc_zt=23&_nc_ht=scontent.fdad3-1.fna&_nc_gid=HDkWQGHwoto5GfsyLPEdSQ&oh=00_Afmbtvg7GnlZmwC9ynRZCnZPvyUv58d0s-iO7ZPQ_cImcg&oe=694B4BD2",
     tags: ["Tech", "Java"],
   },
-  
+
   {
     id: 4,
     title: "System Design: Thiết kế hệ thống lớn với Senior từ Amazon",
@@ -100,7 +100,7 @@ export function WorkshopsSection({ setCurrentView }: WorkshopsSectionProps) {
             {workshops.map((workshop) => (
               <CarouselItem key={workshop.id} className="pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/3">
                 <Card
-                  onClick={() => setCurrentView("event-hub")}
+                  onClick={() => setCurrentView("workshop-detail")}
                   className="group h-full flex flex-col overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer bg-white rounded-2xl"
                 >
                   {/* Image Area - 55% height */}
