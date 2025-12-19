@@ -8,6 +8,7 @@ import { AISuggestionsSection } from "@/components/ai-suggestions-section"
 import { JobBoardSection } from "@/components/job-board-section"
 import { TopEmployersSection } from "@/components/top-employers-section"
 import { FixedAIChatbot } from "@/components/fixed-ai-chatbot"
+import { AIChatbot } from "@/components/ai-chatbot"
 import { RecruiterView } from "@/components/recruiter-view"
 import { JobFairView } from "@/components/jobfair-view"
 import { UniversityView } from "@/components/university-view"
@@ -78,7 +79,7 @@ export default function HomePage() {
         )}
       </main>
 
-      <FixedAIChatbot />
+      <AIChatbot />
     </div>
   )
 }

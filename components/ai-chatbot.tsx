@@ -7,58 +7,100 @@ import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-
-interface Message {
-  id: number
-  role: "bot" | "user"
-  content: string
-  timestamp: Date
-}
+import { EnhancedMessage, MessageType } from "./chatbot/types"
+import { generateResponse } from "./chatbot/ai-logic"
+import { CompanyList } from "./chatbot/CompanyList"
+import { RoadmapTimeline } from "./chatbot/RoadmapTimeline"
 
 export function AIChatbot() {
   const [isOpen, setIsOpen] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
   const [inputValue, setInputValue] = useState("")
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState<EnhancedMessage[]>([
     {
       id: 1,
       role: "bot",
       content:
-        "Chào Huy 👋 Dựa trên điểm GPA 3.2 của bạn, mình gợi ý lộ trình trở thành Fullstack Developer nhé. Bạn có muốn tìm hiểu thêm không?",
+        "Xin chào! 👋 Mình là DUT AI Mentor - trợ lý ảo của DUTCareers. Mình có thể giúp bạn tìm việc làm, gợi ý lộ trình học tập, hoặc review CV. Bạn cần hỗ trợ gì nhé?",
+      type: MessageType.TEXT,
       timestamp: new Date(),
     },
   ])
 
-  const suggestionChips = ["Review CV của tôi", "Lộ trình Web Dev", "Việc thực tập gần đây"]
+  const suggestionChips = [
+    "Tìm việc AI Engineer",
+    "Lộ trình Fullstack Developer",
+    "Công ty tại Đà Nẵng",
+    "Review CV của tôi",
+  ]
 
   const handleSend = () => {
     if (!inputValue.trim()) return
 
-    const newUserMessage: Message = {
+    const userQuery = inputValue
+    const newUserMessage: EnhancedMessage = {
       id: messages.length + 1,
       role: "user",
-      content: inputValue,
+      content: userQuery,
+      type: MessageType.TEXT,
       timestamp: new Date(),
     }
 
     setMessages([...messages, newUserMessage])
     setInputValue("")
 
-    // Simulate bot response
+    // Generate AI response
     setTimeout(() => {
-      const botResponse: Message = {
-        id: messages.length + 2,
-        role: "bot",
-        content:
-          "Để trở thành Fullstack Developer, bạn cần: 1) Học Frontend (React, Next.js) - 3 tháng, 2) Backend (Node.js, Express) - 2 tháng, 3) Database (PostgreSQL) - 1 tháng. Tổng thời gian: 6 tháng. Bạn muốn xem danh sách khóa học không?",
-        timestamp: new Date(),
-      }
+      const botResponse = generateResponse(userQuery, messages.length + 2)
       setMessages((prev) => [...prev, botResponse])
-    }, 1000)
+    }, 800)
   }
 
   const handleChipClick = (chip: string) => {
     setInputValue(chip)
+  }
+
+  const renderMessageContent = (message: EnhancedMessage) => {
+    switch (message.type) {
+      case MessageType.COMPANY_LIST:
+        return (
+          <div className="space-y-3">
+            <p className="text-sm leading-relaxed">{message.content}</p>
+            {message.data?.companies && <CompanyList companies={message.data.companies} />}
+          </div>
+        )
+
+      case MessageType.ROADMAP:
+        return (
+          <div className="space-y-3">
+            <p className="text-sm leading-relaxed">{message.content}</p>
+            {message.data?.roadmap && <RoadmapTimeline roadmap={message.data.roadmap} />}
+          </div>
+        )
+
+      case MessageType.COMBINED:
+        return (
+          <div className="space-y-4">
+            <p className="text-sm leading-relaxed">{message.content}</p>
+            {message.data?.companies && message.data.companies.length > 0 && (
+              <div>
+                <h5 className="text-sm font-semibold text-slate-700 mb-2">🏢 Công ty đang tuyển dụng</h5>
+                <CompanyList companies={message.data.companies} />
+              </div>
+            )}
+            {message.data?.roadmap && (
+              <div>
+                <h5 className="text-sm font-semibold text-slate-700 mb-2">📚 Lộ trình học tập</h5>
+                <RoadmapTimeline roadmap={message.data.roadmap} />
+              </div>
+            )}
+          </div>
+        )
+
+      case MessageType.TEXT:
+      default:
+        return <p className="text-sm leading-relaxed whitespace-pre-line">{message.content}</p>
+    }
   }
 
   if (!isOpen) {
@@ -76,9 +118,8 @@ export function AIChatbot() {
 
   return (
     <Card
-      className={`fixed bottom-6 right-6 z-50 bg-white shadow-2xl border-0 transition-all duration-300 ${
-        isMinimized ? "h-16 w-80" : "h-[600px] w-96"
-      }`}
+      className={`fixed bottom-6 right-6 z-50 bg-white shadow-2xl border-0 transition-all duration-300 ${isMinimized ? "h-16 w-80" : "h-[600px] w-96"
+        }`}
     >
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 p-4 rounded-t-lg flex items-center justify-between">
@@ -126,13 +167,17 @@ export function AIChatbot() {
                   </Avatar>
                 )}
                 <div
-                  className={`max-w-[75%] rounded-2xl p-3 ${
-                    message.role === "bot" ? "bg-white border border-border" : "bg-blue-600 text-white"
-                  }`}
+                  className={`${message.role === "bot"
+                      ? message.type === MessageType.TEXT
+                        ? "max-w-[75%]"
+                        : "max-w-[90%]"
+                      : "max-w-[75%]"
+                    } rounded-2xl p-3 ${message.role === "bot" ? "bg-white border border-border" : "bg-blue-600 text-white"
+                    }`}
                 >
-                  <p className="text-sm leading-relaxed">{message.content}</p>
+                  {message.role === "bot" ? renderMessageContent(message) : <p className="text-sm leading-relaxed">{message.content}</p>}
                   <span
-                    className={`text-xs mt-1 block ${message.role === "bot" ? "text-muted-foreground" : "text-blue-100"}`}
+                    className={`text-xs mt-2 block ${message.role === "bot" ? "text-muted-foreground" : "text-blue-100"}`}
                   >
                     {message.timestamp.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}
                   </span>
