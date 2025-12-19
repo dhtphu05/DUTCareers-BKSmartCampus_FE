@@ -1,6 +1,6 @@
 "use client"
 
-import { Briefcase, MapPin, Heart, Clock, TrendingUp } from "lucide-react"
+import { Briefcase, MapPin, Heart, Clock, TrendingUp, ChevronRight } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -88,112 +88,138 @@ const jobs: Job[] = [
 
 export function JobBoardSection({ onJobClick }: JobBoardSectionProps) {
   return (
-    <section className="py-12 lg:py-16 bg-white">
+    <section className="py-16 lg:py-20 bg-slate-50/50">
       <div className="container mx-auto px-4 lg:px-8">
-        <Tabs defaultValue="best" className="space-y-6">
-          <TabsList className="bg-slate-100 p-1 rounded-xl">
-            <TabsTrigger
-              value="best"
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-6"
-            >
-              <TrendingUp className="h-4 w-4 mr-2" />
-              Việc làm tốt nhất
-            </TabsTrigger>
-            <TabsTrigger
-              value="latest"
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-6"
-            >
-              <Clock className="h-4 w-4 mr-2" />
-              Việc làm mới nhất
-            </TabsTrigger>
-            <TabsTrigger
-              value="internship"
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-6"
-            >
-              <Briefcase className="h-4 w-4 mr-2" />
-              Thực tập
-            </TabsTrigger>
-          </TabsList>
+        <Tabs defaultValue="best" className="space-y-8">
+          {/* Pills Tabs List */}
+          <div className="flex justify-center">
+            <TabsList className="bg-white p-1.5 rounded-full border border-slate-200 shadow-sm h-auto inline-flex gap-1">
+              <TabsTrigger
+                value="best"
+                className="rounded-full px-6 py-2.5 text-slate-600 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all font-medium"
+              >
+                <TrendingUp className="h-4 w-4 mr-2" />
+                Việc làm tốt nhất
+              </TabsTrigger>
+              <TabsTrigger
+                value="latest"
+                className="rounded-full px-6 py-2.5 text-slate-600 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all font-medium"
+              >
+                <Clock className="h-4 w-4 mr-2" />
+                Việc làm mới nhất
+              </TabsTrigger>
+              <TabsTrigger
+                value="internship"
+                className="rounded-full px-6 py-2.5 text-slate-600 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all font-medium"
+              >
+                <Briefcase className="h-4 w-4 mr-2" />
+                Thực tập
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="best" className="space-y-4">
-            {jobs.map((job) => (
-              <Card
-                key={job.id}
-                onClick={() => onJobClick(job)}
-                className="group overflow-hidden border-0 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer"
-              >
-                <div className="flex items-center gap-6 p-6">
-                  {/* Company Logo */}
-                  <div className="flex-shrink-0">
-                    <img
-                      src={job.logo || "/placeholder.svg"}
-                      alt={job.company}
-                      className="h-16 w-16 rounded-xl border-2 border-slate-100 object-cover"
-                    />
-                  </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-1 gap-4">
+              {jobs.map((job) => (
+                <Card
+                  key={job.id}
+                  onClick={() => onJobClick(job)}
+                  className="group relative overflow-hidden border-0 bg-white shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer rounded-2xl"
+                >
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 p-6">
+                    {/* Company Logo with styling */}
+                    <div className="flex-shrink-0">
+                      <img
+                        src={job.logo || "/placeholder.svg"}
+                        alt={job.company}
+                        className="h-20 w-20 rounded-2xl border border-slate-100 shadow-sm object-contain p-1 bg-white group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
 
-                  {/* Job Info */}
-                  <div className="flex-1 min-w-0 space-y-3">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-800 transition-colors">
-                          {job.title}
-                        </h3>
-                        {job.isHot && (
-                          <Badge className="bg-gradient-to-r from-red-500 to-red-600 text-white border-0 px-2 py-0.5 text-xs">
-                            HOT
-                          </Badge>
-                        )}
+                    {/* Job Info */}
+                    <div className="flex-1 min-w-0 space-y-3 w-full">
+                      <div className="space-y-1">
+                        <div className="flex items-center flex-wrap gap-2">
+                          <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors">
+                            {job.title}
+                          </h3>
+                          {job.isHot && (
+                            <Badge className="bg-red-500 hover:bg-red-600 text-white border-0 px-2.5 py-0.5 text-xs animate-pulse">
+                              HOT
+                            </Badge>
+                          )}
+                        </div>
+                        <p className="text-slate-600 text-base font-medium">{job.company}</p>
                       </div>
-                      <p className="text-slate-600">{job.company}</p>
-                    </div>
 
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Badge variant="secondary" className="bg-slate-100 text-slate-700 border-0 px-3 py-1">
-                        {job.type}
-                      </Badge>
-                      <Badge
-                        variant="secondary"
-                        className="bg-slate-100 text-slate-700 border-0 px-3 py-1 flex items-center gap-1"
-                      >
-                        <MapPin className="h-3 w-3" />
-                        {job.location}
-                      </Badge>
-                      {job.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary" className="bg-blue-50 text-blue-700 border-0 px-3 py-1">
-                          {tag}
+                      <div className="flex flex-wrap items-center gap-2.5">
+                        <Badge variant="secondary" className="bg-slate-100 text-slate-600 hover:bg-slate-200 border-0 px-3 py-1 font-normal">
+                          {job.type}
                         </Badge>
-                      ))}
+                        <Badge
+                          variant="secondary"
+                          className="bg-slate-100 text-slate-600 hover:bg-slate-200 border-0 px-3 py-1 font-normal flex items-center gap-1"
+                        >
+                          <MapPin className="h-3.5 w-3.5" />
+                          {job.location}
+                        </Badge>
+                        {/* Pastel Tags */}
+                        {job.tags.map((tag, idx) => (
+                          <Badge
+                            key={tag}
+                            variant="secondary"
+                            className={`border-0 px-3 py-1 font-medium ${idx % 2 === 0 ? 'bg-blue-50 text-blue-700 hover:bg-blue-100' : 'bg-orange-50 text-orange-700 hover:bg-orange-100'
+                              }`}
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
 
-                    <p className="text-sm text-slate-500 flex items-center gap-1">
-                      <Clock className="h-3.5 w-3.5" />
-                      {job.postedTime}
-                    </p>
-                  </div>
+                    {/* Salary & Action */}
+                    <div className="flex-shrink-0 flex flex-row sm:flex-col items-end justify-between w-full sm:w-auto mt-4 sm:mt-0 gap-4">
+                      <div className="text-lg font-bold text-red-600 bg-red-50 px-3 py-1 rounded-lg">
+                        {job.salary}
+                      </div>
 
-                  <div className="flex-shrink-0 text-right space-y-3">
-                    <div className="text-xl font-bold text-red-600">{job.salary}</div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-10 w-10 rounded-xl border border-slate-200 hover:border-red-500 hover:text-red-500"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <Heart className="h-5 w-5" />
-                    </Button>
+                      {/* Hidden button showing on hover */}
+                      <div className="hidden lg:block opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300 absolute right-6 bottom-6 sm:static sm:translate-x-0">
+                        <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/30 rounded-xl px-6">
+                          Ứng tuyển ngay <ChevronRight className="ml-1 h-4 w-4" />
+                        </Button>
+                      </div>
+
+                      {/* Mobile/Tablet explicit button (always visible) */}
+                      <div className="lg:hidden">
+                        <Button variant="outline" size="sm" className="text-blue-600 border-blue-200">
+                          Chi tiết
+                        </Button>
+                      </div>
+
+                      <div className="text-sm text-slate-400 font-medium group-hover:opacity-0 transition-opacity absolute bottom-6 right-6 lg:static lg:group-hover:hidden">
+                        {job.postedTime}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </Card>
-            ))}
+                </Card>
+              ))}
+            </div>
           </TabsContent>
 
           <TabsContent value="latest" className="space-y-4">
-            <div className="text-center py-12 text-slate-500">Nội dung việc làm mới nhất...</div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-1 gap-4">
+              {/* Reusing same structure for verification */}
+              {jobs.slice(0, 3).map((job) => (
+                <Card key={job.id} onClick={() => onJobClick(job)} className="p-6 cursor-pointer hover:shadow-lg transition-all"><h3 className="font-bold">{job.title}</h3></Card>
+              ))}
+            </div>
           </TabsContent>
 
           <TabsContent value="internship" className="space-y-4">
-            <div className="text-center py-12 text-slate-500">Nội dung thực tập...</div>
+            <div className="text-center py-12 text-slate-500 bg-white rounded-2xl border border-dashed border-slate-300">
+              Đang cập nhật danh sách thực tập...
+            </div>
           </TabsContent>
         </Tabs>
       </div>
