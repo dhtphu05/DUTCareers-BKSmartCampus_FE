@@ -1,9 +1,10 @@
 "use client"
 
-import { Sparkles, TrendingUp, AlertCircle } from "lucide-react"
+import { Sparkles, TrendingUp, Lightbulb, BookOpen } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 const aiJobs = [
   {
@@ -14,6 +15,7 @@ const aiJobs = [
     location: "Đà Nẵng",
     salary: "8 - 12 Triệu",
     match: 95,
+    matchColor: "text-green-500",
     missingSkills: [],
     tags: ["React", "TypeScript", "Node.js"],
   },
@@ -25,7 +27,11 @@ const aiJobs = [
     location: "Đà Nẵng",
     salary: "12 - 18 Triệu",
     match: 88,
-    missingSkills: ["Docker"],
+    matchColor: "text-emerald-500",
+    missingSkills: [
+      { name: "Docker", course: "Khóa học Docker cơ bản (Coursera)" },
+      { name: "Microservices", course: "Kiến trúc Microservices (Udemy)" }
+    ],
     tags: ["Java", "Spring Boot", "MySQL"],
   },
   {
@@ -36,6 +42,7 @@ const aiJobs = [
     location: "Remote",
     salary: "10 - 15 Triệu",
     match: 92,
+    matchColor: "text-green-500",
     missingSkills: [],
     tags: ["Flutter", "Dart", "Firebase"],
   },
@@ -43,115 +50,136 @@ const aiJobs = [
 
 export function AISuggestionsSection() {
   return (
-    <section className="py-12 lg:py-16 bg-gradient-to-br from-blue-50 via-amber-50/30 to-blue-50">
+    <section className="py-16 lg:py-20 bg-[url('/grid.svg')] bg-fixed bg-slate-50 relative overflow-hidden">
+      {/* Background Blurs */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-200/30 rounded-full blur-3xl -z-10" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-200/30 rounded-full blur-3xl -z-10" />
+
       <div className="container mx-auto px-4 lg:px-8">
-        {/* Section Header with AI Badge */}
-        <div className="mb-8 space-y-3">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-amber-600">
-              <Sparkles className="h-5 w-5 text-white" />
-            </div>
-            <h2 className="text-3xl font-bold text-slate-900">Gợi ý việc làm từ AI cho Nguyễn Văn A</h2>
+        {/* Section Header */}
+        <div className="mb-10 lg:mb-12 text-center text-balance space-y-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100/50 border border-blue-200 text-blue-800 font-semibold text-sm backdrop-blur-sm">
+            <Sparkles className="h-4 w-4" />
+            <span>Gợi ý thông minh từ AI CareerBot</span>
           </div>
-          <p className="text-slate-600 flex items-center gap-2">
-            <TrendingUp className="h-4 w-4" />
+          <h2 className="text-3xl lg:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 via-purple-700 to-pink-700 pb-1">
+            Việc làm "chuẩn gu" cho Nguyễn Văn A
+          </h2>
+          <p className="text-slate-600 flex items-center justify-center gap-2 text-lg">
+            <TrendingUp className="h-5 w-5 text-green-500" />
             Dựa trên hồ sơ GPA 3.2 và kỹ năng của bạn
           </p>
         </div>
 
         {/* AI Job Cards Grid */}
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-3 gap-8">
           {aiJobs.map((job) => (
-            <Card
-              key={job.id}
-              className="group relative overflow-hidden border-2 border-amber-200/50 bg-white shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 hover:border-amber-400"
-            >
-              {/* Gradient Accent */}
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600" />
+            <div key={job.id} className="relative group">
+              {/* Gradient Border Effect */}
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 rounded-2xl opacity-70 blur-sm group-hover:opacity-100 transition-opacity duration-300" />
 
-              <div className="p-6 space-y-5">
-                {/* Match Score Circle */}
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-4">
+              <Card className="relative h-full flex flex-col justify-between border-0 bg-white/90 backdrop-blur-xl p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300">
+                <div className="space-y-6">
+                  {/* Header: Logo & Match Score */}
+                  <div className="flex justify-between items-start">
                     <img
                       src={job.logo || "/placeholder.svg"}
                       alt={job.company}
-                      className="h-14 w-14 rounded-xl border-2 border-slate-100 object-cover"
+                      className="h-16 w-16 rounded-2xl border border-slate-100 shadow-sm object-contain bg-white p-1"
                     />
-                    <div>
-                      <h3 className="font-semibold text-slate-900 group-hover:text-blue-800 transition-colors">
-                        {job.title}
-                      </h3>
-                      <p className="text-sm text-slate-600">{job.company}</p>
+
+                    {/* Match Score Display */}
+                    <div className="relative group/score cursor-help">
+                      <div className="relative flex items-center justify-center h-14 w-14">
+                        <svg className="h-full w-full -rotate-90">
+                          <circle
+                            cx="28"
+                            cy="28"
+                            r="24"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                            fill="none"
+                            className="text-slate-100"
+                          />
+                          <circle
+                            cx="28"
+                            cy="28"
+                            r="24"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                            fill="none"
+                            strokeDasharray={`${2 * Math.PI * 24}`}
+                            strokeDashoffset={`${2 * Math.PI * 24 * (1 - job.match / 100)}`}
+                            className={`${job.match >= 90 ? 'text-green-500' : 'text-emerald-500'} transition-all duration-1000`}
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                          <span className={`text-sm font-extrabold ${job.match >= 90 ? 'text-green-600' : 'text-emerald-600'}`}>{job.match}%</span>
+                        </div>
+                      </div>
+                      {/* Popover/Tooltip for Match details would go here */}
                     </div>
                   </div>
 
-                  {/* Circular Progress */}
-                  <div className="relative flex h-16 w-16 flex-shrink-0 items-center justify-center">
-                    <svg className="h-16 w-16 -rotate-90">
-                      <circle
-                        cx="32"
-                        cy="32"
-                        r="28"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                        fill="none"
-                        className="text-slate-100"
-                      />
-                      <circle
-                        cx="32"
-                        cy="32"
-                        r="28"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                        fill="none"
-                        strokeDasharray={`${2 * Math.PI * 28}`}
-                        strokeDashoffset={`${2 * Math.PI * 28 * (1 - job.match / 100)}`}
-                        className="text-green-500 transition-all duration-1000"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-xl font-bold text-green-600">{job.match}%</span>
-                      <span className="text-[10px] text-slate-500">Match</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Missing Skills Alert */}
-                {job.missingSkills.length > 0 && (
-                  <div className="flex items-start gap-2 rounded-lg bg-amber-50 p-3 border border-amber-200">
-                    <AlertCircle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
-                    <div className="text-sm">
-                      <span className="font-medium text-amber-900">Thiếu: </span>
-                      <span className="text-amber-700">{job.missingSkills.join(", ")}</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Job Details */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-600">{job.location}</span>
-                    <span className="font-bold text-red-600">{job.salary}</span>
+                  {/* Job Info */}
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors line-clamp-1 mb-1">
+                      {job.title}
+                    </h3>
+                    <p className="text-slate-500 font-medium">{job.company}</p>
                   </div>
 
-                  {/* Skills Tags */}
+                  {/* Tags */}
                   <div className="flex flex-wrap gap-2">
-                    {job.tags.map((tag) => (
-                      <Badge key={tag} variant="secondary" className="bg-blue-50 text-blue-700 border-0 px-2.5 py-1">
+                    {job.tags.map(tag => (
+                      <Badge key={tag} variant="secondary" className="bg-slate-100 text-slate-700 hover:bg-slate-200">
                         {tag}
                       </Badge>
                     ))}
                   </div>
+
+                  {/* Learning Suggestion (Missing Skills) */}
+                  {job.missingSkills.length > 0 && (
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-sm text-slate-600 font-medium">
+                        <Lightbulb className="h-4 w-4 text-amber-500" />
+                        <span>Gợi ý học tập để phù hợp 100%:</span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <TooltipProvider>
+                          {job.missingSkills.map((skill: any) => (
+                            <Tooltip key={skill.name}>
+                              <TooltipTrigger asChild>
+                                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg text-xs font-semibold cursor-pointer hover:bg-amber-100 transition-colors">
+                                  <BookOpen className="h-3 w-3" />
+                                  {skill.name}
+                                </div>
+                              </TooltipTrigger>
+                              <TooltipContent className="bg-slate-900 text-white border-0 shadow-xl p-3">
+                                <p className="font-semibold text-amber-400 mb-1">Gợi ý khóa học:</p>
+                                <p>{skill.course}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          ))}
+                        </TooltipProvider>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {/* Apply Button */}
-                <Button className="w-full bg-blue-800 hover:bg-blue-900 text-white font-semibold rounded-xl h-11">
-                  Ứng tuyển ngay
-                </Button>
-              </div>
-            </Card>
+                {/* Footer Stats & Button */}
+                <div className="pt-6 border-t border-slate-100 mt-6 flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Mức lương</p>
+                    <p className="font-bold text-slate-900">{job.salary}</p>
+                  </div>
+                  <Button className="bg-slate-900 hover:bg-blue-700 text-white rounded-xl font-bold shadow-lg shadow-blue-900/10 hover:shadow-blue-700/20 transition-all">
+                    Ứng tuyển ngay
+                  </Button>
+                </div>
+              </Card>
+            </div>
           ))}
         </div>
       </div>
