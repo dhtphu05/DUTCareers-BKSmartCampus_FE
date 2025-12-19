@@ -104,6 +104,11 @@ export function HeroSection() {
                 key={tag}
                 variant="secondary"
                 className="bg-white/10 hover:bg-white/20 text-white backdrop-blur-md border border-white/10 px-4 py-1.5 text-sm transition-all cursor-pointer"
+                onClick={() => {
+                  if (tag === "Xây Dựng") {
+                    (window as any).__navigateToProfile?.();
+                  }
+                }}
               >
                 #{tag}
               </Badge>

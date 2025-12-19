@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ModernHeader } from "@/components/modern-header"
 import { HeroSection } from "@/components/hero-section"
 import { WorkshopsSection } from "@/components/workshops-section"
@@ -13,8 +13,9 @@ import { JobFairView } from "@/components/jobfair-view"
 import { UniversityView } from "@/components/university-view"
 import { JobDetailView } from "@/components/job-detail-view"
 import { WorkshopDetailView } from "@/components/workshop-detail-view"
+import { CompanyProfileView } from "@/components/company-profile-view"
 
-export type ViewType = "student-home" | "job-detail" | "event-hub" | "recruiter-dashboard" | "admin-dashboard" | "workshop-detail"
+export type ViewType = "student-home" | "job-detail" | "event-hub" | "recruiter-dashboard" | "admin-dashboard" | "workshop-detail" | "company-profile"
 
 export interface Job {
   id: number
@@ -32,6 +33,10 @@ export interface Job {
 export default function HomePage() {
   const [currentView, setCurrentView] = useState<ViewType>("student-home")
   const [selectedJob, setSelectedJob] = useState<Job | null>(null)
+
+  useEffect(() => {
+    (window as any).__navigateToProfile = () => setCurrentView("company-profile");
+  }, []);
 
   const handleJobClick = (job: Job) => {
     setSelectedJob(job)
@@ -61,6 +66,10 @@ export default function HomePage() {
         {currentView === "job-detail" && selectedJob && <JobDetailView job={selectedJob} onBack={handleBackToHome} />}
 
         {currentView === "workshop-detail" && <WorkshopDetailView onBack={() => setCurrentView("student-home")} />}
+
+        {currentView === "company-profile" && <CompanyProfileView onBack={() => setCurrentView("student-home")} />}
+
+
 
         {currentView === "event-hub" && (
           <div className="container mx-auto px-4 lg:px-8 py-12">
