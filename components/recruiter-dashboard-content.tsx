@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
+import { SmartHeadhunting } from "@/components/smart-headhunting"
+
 const candidates = [
   {
     id: 1,
@@ -133,81 +135,8 @@ export function RecruiterDashboardContent() {
         </CardContent>
       </Card>
 
-      {/* Talent Search */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Search className="h-5 w-5" />
-            Tìm kiếm Nhân tài
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col lg:flex-row gap-4 mb-6">
-            <Input placeholder="Tìm theo kỹ năng, chuyên ngành..." className="flex-1" />
-            <Select defaultValue="all">
-              <SelectTrigger className="lg:w-48">
-                <Filter className="mr-2 h-4 w-4" />
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tất cả GPA</SelectItem>
-                <SelectItem value="high">GPA &gt; 3.5</SelectItem>
-                <SelectItem value="mid">GPA 3.0-3.5</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button className="bg-primary hover:bg-primary-dark">Tìm kiếm</Button>
-          </div>
-
-          <div className="border rounded-lg overflow-hidden">
-            <table className="w-full">
-              <thead className="bg-muted/50">
-                <tr>
-                  <th className="text-left p-3 text-sm font-semibold">Ứng viên</th>
-                  <th className="text-left p-3 text-sm font-semibold">Chuyên ngành</th>
-                  <th className="text-left p-3 text-sm font-semibold">GPA</th>
-                  <th className="text-left p-3 text-sm font-semibold">Kỹ năng</th>
-                  <th className="text-left p-3 text-sm font-semibold">Khớp</th>
-                  <th className="text-left p-3 text-sm font-semibold">Hành động</th>
-                </tr>
-              </thead>
-              <tbody>
-                {candidates.map((candidate) => (
-                  <tr key={candidate.id} className="border-t hover:bg-muted/30 transition-colors">
-                    <td className="p-3">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-10 w-10">
-                          <AvatarImage src={candidate.avatar || "/placeholder.svg"} />
-                          <AvatarFallback>{candidate.name[0]}</AvatarFallback>
-                        </Avatar>
-                        <span className="font-medium text-sm">{candidate.name}</span>
-                      </div>
-                    </td>
-                    <td className="p-3 text-sm">{candidate.major}</td>
-                    <td className="p-3 text-sm font-semibold">{candidate.gpa}</td>
-                    <td className="p-3">
-                      <div className="flex gap-1">
-                        {candidate.skills.map((skill) => (
-                          <Badge key={skill} variant="secondary" className="text-xs">
-                            {skill}
-                          </Badge>
-                        ))}
-                      </div>
-                    </td>
-                    <td className="p-3">
-                      <Badge className="bg-green-100 text-green-700 border-0">{candidate.match}%</Badge>
-                    </td>
-                    <td className="p-3">
-                      <Button size="sm" variant="outline">
-                        Xem Profile
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Smart Headhunting Section */}
+      <SmartHeadhunting />
     </div>
   )
 }

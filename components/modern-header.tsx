@@ -1,6 +1,6 @@
 "use client"
 
-import { Bell, Briefcase, Calendar, Building2, Shield } from "lucide-react"
+import { Bell, Briefcase, Calendar, Building2, Shield, QrCode } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import type { ViewType } from "@/app/page"
@@ -37,9 +37,8 @@ export function ModernHeader({ currentView, setCurrentView }: ModernHeaderProps)
               <button
                 key={item.id}
                 onClick={() => setCurrentView(item.id)}
-                className={`relative px-4 py-2 text-sm font-medium transition-colors hover:text-blue-800 ${
-                  currentView === item.id ? "text-blue-800" : "text-slate-600"
-                }`}
+                className={`relative px-4 py-2 text-sm font-medium transition-colors hover:text-blue-800 ${currentView === item.id ? "text-blue-800" : "text-slate-600"
+                  }`}
               >
                 <span className="flex items-center gap-2">
                   <Icon className="h-4 w-4" />
@@ -55,29 +54,27 @@ export function ModernHeader({ currentView, setCurrentView }: ModernHeaderProps)
 
         {/* Right Section */}
         <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative text-slate-600 hover:text-blue-600"
+            onClick={() => setCurrentView("job-fair-pass")}
+            title="Job Fair Pass"
+          >
+            <QrCode className="h-5 w-5" />
+          </Button>
+
           <Button variant="ghost" size="icon" className="relative">
             <Bell className="h-5 w-5 text-slate-600" />
             <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-600" />
           </Button>
 
-          <div className="relative">
-            <Avatar className="h-9 w-9 ring-2 ring-blue-100">
-              <AvatarImage src="/placeholder.svg?height=36&width=36" alt="Nguyễn Văn A" />
-              <AvatarFallback className="bg-blue-100 text-blue-800 text-sm font-semibold">NVA</AvatarFallback>
-            </Avatar>
-            <div className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-green-500 ring-2 ring-white flex items-center justify-center">
-              <svg className="h-2 w-2 text-white" fill="currentColor" viewBox="0 0 8 8">
-                <path
-                  d="M6.5 1L2.5 5L1 3.5"
-                  stroke="white"
-                  strokeWidth="1.5"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          </div>
+          <Button
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl px-6 shadow-sm shadow-blue-200"
+            onClick={() => setCurrentView("student-sso")}
+          >
+            Đăng nhập
+          </Button>
         </div>
       </div>
     </header>
