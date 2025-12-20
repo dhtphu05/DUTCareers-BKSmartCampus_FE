@@ -15,8 +15,10 @@ import { UniversityView } from "@/components/university-view"
 import { JobDetailView } from "@/components/job-detail-view"
 import { WorkshopDetailView } from "@/components/workshop-detail-view"
 import { CompanyProfileView } from "@/components/company-profile-view"
+import { StudentSSOView } from "@/components/student-sso-view"
+import { JobFairPassView } from "@/components/job-fair-pass-view"
 
-export type ViewType = "student-home" | "job-detail" | "event-hub" | "recruiter-dashboard" | "admin-dashboard" | "workshop-detail" | "company-profile"
+export type ViewType = "student-home" | "job-detail" | "event-hub" | "recruiter-dashboard" | "admin-dashboard" | "workshop-detail" | "company-profile" | "student-sso" | "job-fair-pass"
 
 export interface Job {
   id: number
@@ -77,6 +79,10 @@ export default function HomePage() {
             <JobFairView />
           </div>
         )}
+
+        {currentView === "student-sso" && <StudentSSOView onBack={() => setCurrentView("student-home")} />}
+
+        {currentView === "job-fair-pass" && <JobFairPassView />}
 
         {currentView === "recruiter-dashboard" && (
           <div className="container mx-auto px-4 lg:px-8 py-12">
