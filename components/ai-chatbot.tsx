@@ -112,6 +112,7 @@ export function AIChatbot() {
       >
         <Bot className="h-7 w-7 text-white group-hover:scale-110 transition-transform" />
         <span className="absolute -top-2 -right-2 h-4 w-4 rounded-full bg-red-500 animate-pulse" />
+        <div className="absolute inset-0 rounded-full bg-blue-500 animate-ping opacity-75" />
       </Button>
     )
   }
@@ -168,10 +169,10 @@ export function AIChatbot() {
                 )}
                 <div
                   className={`${message.role === "bot"
-                      ? message.type === MessageType.TEXT
-                        ? "max-w-[75%]"
-                        : "max-w-[90%]"
-                      : "max-w-[75%]"
+                    ? message.type === MessageType.TEXT
+                      ? "max-w-[75%]"
+                      : "max-w-[90%]"
+                    : "max-w-[75%]"
                     } rounded-2xl p-3 ${message.role === "bot" ? "bg-white border border-border" : "bg-blue-600 text-white"
                     }`}
                 >
